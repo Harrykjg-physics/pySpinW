@@ -1,6 +1,7 @@
 import numpy as np
 from .MatlabProxyObject import MatlabProxyObject
 from .MatlabFunction import MatlabFunction
+from .MatlabStruct import MatlabStruct
 
 class DataTypes:
 
@@ -41,10 +42,12 @@ class DataTypes:
             data = data.handle
         else:
             # Case 2, 3
-            if isinstance(data, dict):
+            if isinstance(data, MatlabStruct):
                 # Case 2)
+                newdata = dict()
                 for key, item in data.items():
-                    data[key] = self.encode(item)
+                    newdata[key] = self.encode(item)
+                data = newdata
             elif isinstance(data, tuple):
                 # Case 3)
                 newdata = []
@@ -56,7 +59,7 @@ class DataTypes:
         # TODO Make sure this works for more data cases...
         return data
 
-    def decode(self, data):
+    def decode(self, data, parent=None):
         # Decode the numeric data types. NOTE that we let the functions/methods slip through.
         if isinstance(data, list):
             # This is a cell return
@@ -79,8 +82,10 @@ class DataTypes:
                     except Exception as e:
                         print(e)
         elif isinstance(data, dict):
+            newData = MatlabStruct(parent=parent, interface=self.interface, converter=self)
             for key, item in data.items():
-                data[key] = self.decode(item)
+                newData[key] = self.decode(item)
+            data = newData
         elif self.interface.feval('isobject', data):
             data = MatlabProxyObject(self.interface, data, self)
         elif self.interface.feval('isa', data, 'function_handle'):

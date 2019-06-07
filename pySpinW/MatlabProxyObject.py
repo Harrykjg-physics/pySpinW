@@ -1,8 +1,6 @@
 from io import StringIO
-
 from .MatlabFunction import MatlabFunction
 import re
-
 
 class MatlabProxyObject(object):
     """A Proxy for an object that exists in Matlab.
@@ -26,11 +24,16 @@ class MatlabProxyObject(object):
         self.__dict__['converter'] = converter
 
         for attribute in self._getAttributeNames():
-            self.__dict__[attribute] = self.__getattr__(attribute)
+            super(MatlabProxyObject, self).__setattr__(attribute,
+                                                       self.converter.decode(
+                                                           self.__getattr__(attribute),
+                                                           parent=handle))
         for method in self._getMethodNames():
             super(MatlabProxyObject, self).__setattr__(method,
-                                                       MatlabFunction(self.interface, method,
-                                                                      converter=self.converter, parent=self.handle,
+                                                       MatlabFunction(self.interface,
+                                                                      method,
+                                                                      converter=self.converter,
+                                                                      parent=self.handle,
                                                                       caller=self))
 
     def _getAttributeNames(self):
@@ -48,7 +51,8 @@ class MatlabProxyObject(object):
         return self.interface.methods(self.interface.feval('handle', self.handle))
 
     def __getattr__(self, name):
-        """Retrieve a value or function from the object.
+        """Retrieve a value or function from the object. IF it doesn't exist. Otherwise self.__getattribute__(item) is
+        called instead.
 
         Properties are returned as native Python objects or
         :class:`MatlabProxyObject` objects.
@@ -77,9 +81,11 @@ class MatlabProxyObject(object):
             return matlab_method()
 
     def __setattr__(self, name, value):
-        self.__class__[name] = value
-        access = self.interface.substruct('.', name)
-        self.interface.subsasgn(self, access, value)
+        # This works for fields. But not subfields.....
+        if name in self._getAttributeNames():
+            access = self.interface.substruct('.', name)
+            self.__dict__['handle'] = self.interface.subsasgn(self.handle, access, self.converter.encode(value))
+            super(MatlabProxyObject, self).__setattr__(name, value)
 
     def __repr__(self):
         # getclass = self.interface.str2func('class')

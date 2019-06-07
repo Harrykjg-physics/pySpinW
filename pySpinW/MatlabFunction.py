@@ -58,4 +58,4 @@ class MatlabFunction(object):
                 self._caller.updateProxy()
             return
 
-        return self.converter.decode(d)
+        return self.converter.decode(d, parent=self._parent)
