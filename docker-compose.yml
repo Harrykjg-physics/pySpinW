@@ -15,8 +15,7 @@ services:
       && export PYTHONUSERBASE='/home/developer/.local'
       && python setup.py install --user
       && cd /home/developer/pySpinWexamples
-      && git pull
-      && jupyter notebook --notebook-dir=/home/developer/pySpinWexamples --ip='0.0.0.0' --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password=''"
+      && jupyter notebook --notebook-dir=/opt/pySpinW --ip='0.0.0.0' --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password=''"
 
   testScript:
     container_name: pySpinWTest

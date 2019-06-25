@@ -18,5 +18,5 @@ setup(
          "Operating System :: OS Independent",
     ],
     include_package_data=True,
-    install_requires=['numpy']
+    install_requires=['numpy', 'pyvista', 'panel', 'PyQt5', 'matplotlib']
 )

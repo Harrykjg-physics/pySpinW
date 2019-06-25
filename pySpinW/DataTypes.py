@@ -1,7 +1,7 @@
 import numpy as np
 from .MatlabProxyObject import MatlabProxyObject
 from .MatlabFunction import MatlabFunction
-from .MatlabStruct import MatlabStruct
+# from .MatlabStruct import MatlabStruct
 
 class DataTypes:
 
@@ -42,13 +42,14 @@ class DataTypes:
             data = data.handle
         else:
             # Case 2, 3
-            if isinstance(data, MatlabStruct):
-                # Case 2)
-                newdata = dict()
-                for key, item in data.items():
-                    newdata[key] = self.encode(item)
-                data = newdata
-            elif isinstance(data, tuple):
+            # if isinstance(data, MatlabStruct):
+            #     # Case 2)
+            #     newdata = dict()
+            #     for key, item in data.items():
+            #         newdata[key] = self.encode(item)
+            #     data = newdata
+            # elif isinstance(data, tuple):
+            if isinstance(data, tuple):
                 # Case 3)
                 newdata = []
                 for item in data:
@@ -82,7 +83,8 @@ class DataTypes:
                     except Exception as e:
                         print(e)
         elif isinstance(data, dict):
-            newData = MatlabStruct(parent=parent, interface=self.interface, converter=self)
+            # newData = MatlabStruct(parent=parent, interface=self.interface, converter=self)
+            newData = dict()
             for key, item in data.items():
                 newData[key] = self.decode(item)
             data = newData

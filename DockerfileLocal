@@ -38,7 +38,9 @@ RUN mkdir /mcr-install \
 RUN mv /opt/mcr/v96/bin/glnxa64/libexpat.so.1 /opt/mcr/v96/bin/glnxa64/libexpat.so.1.NOFIND
 
 # Install the requirements
-RUN pip install numpy jupyter
+RUN pip install numpy jupyter panel pyvista PyQt5\
+    && curl -sL https://deb.nodesource.com/setup_12.x | bash - \
+    && apt-get install -y nodejs
 
 # Setup the graphics
 # Replace 1000 with your user / group id
