@@ -2,7 +2,9 @@ version: '2'
 
 services:
   basebuild:
-    build: .
+    build:
+      context: .
+      dockerfile: DockerfileLocal
     image: wardsimon/pyspinw
     environment:
       - DISPLAY=${DISPLAY}

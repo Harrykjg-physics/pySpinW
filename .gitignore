@@ -2,3 +2,17 @@
 pySpinW/\.DS_Store
 
 \.DS_Store
+\build/
+\.idea/
+\.oracle_jre_usage/
+\.mcrCache9.6/
+\.matlab/
+\.java/
+\.ipynb_checkpoints/
+\.cache/
+\__pycache__/
+
+
+dist/
+
+pySpinW\.egg-info/

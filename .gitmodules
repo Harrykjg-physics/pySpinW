@@ -1,3 +1,6 @@
 [submodule "src/spinW"]
 	path = src/spinW
 	url = https://github.com/SpinW/spinW_MATLAB
+[submodule "examples"]
+	path = examples
+	url = https://github.com/SpinW/pySpinWexamples.git

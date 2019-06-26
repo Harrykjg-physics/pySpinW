@@ -9,9 +9,14 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - ./:/opt/notebooks
+      - ./:/opt/pySpinW
     command: >
-      bash -c "jupyter notebook --notebook-dir=/opt/notebooks --ip='0.0.0.0' --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password=''"
+      bash -c "cd /opt/pySpinW
+      && export PYTHONUSERBASE='/home/developer/.local'
+      && python setup.py install --user
+      && cd /home/developer/pySpinWexamples
+      && git pull
+      && jupyter notebook --notebook-dir=/home/developer/pySpinWexamples --ip='0.0.0.0' --port=8888 --no-browser --NotebookApp.token='' --NotebookApp.password=''"
 
   testScript:
     container_name: pySpinWTest
@@ -21,7 +26,23 @@ services:
     volumes:
       - ./:/home/developer
     environment:
-      #- SCRIPT="examples/docker_script.py"
+      - SCRIPT="examples/docker_script.py"
       - DISPLAY=${DISPLAY}
     command:
-      bash -c "python3 docker_script.py"
+      bash -c "cd /home/developer
+      && export PYTHONUSERBASE='/home/developer/.local'
+      && python setup.py install --user
+      && echo $SCRIPT
+      && python3 $SCRIPT"
+
+  binder:
+    container_name: binderSpinW
+    build:
+      context: .
+      dockerfile: binder/Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./:/opt/notebooks
+    command: >
+      bash -c "jupyter notebook --notebook-dir=/opt/notebooks --ip='0.0.0.0' --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''"

@@ -1,0 +1,260 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration file="/home/simonward/PycharmProjects/pySpinW/swFuncs2.prj" location="/home/simonward/PycharmProjects/pySpinW" name="swFuncs2" target="target.ezdeploy.library" target-name="Library Compiler">
+    <param.appname>swFuncs</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
+    <param.authnamewatermark>Simon Ward</param.authnamewatermark>
+    <param.email>simon.ward@esss.se</param.email>
+    <param.company>European Spallation Source</param.company>
+    <param.summary>SpinW functions and MATLAB for python helper functions compiled for python usage.</param.summary>
+    <param.description>SpinW (spin-double-u) is a Matlab library that can optimize magnetic structures using mean field theory and calculate spin wave dispersion and spin-spin correlation function for complex crystal and magnetic structures. For details check http://www.spinw.org</param.description>
+    <param.screenshot />
+    <param.guid />
+    <param.installpath.string>/European_Spallation_Source/swFuncs/</param.installpath.string>
+    <param.installpath.combo>option.installpath.user</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.target.install.notes>In the following directions, replace MR/v96 by the directory on the target machine where MATLAB is installed, or MR by the directory where the MATLAB Runtime is installed.
+
+(1) Set the environment variable XAPPLRESDIR to this value:
+
+MR/v96/X11/app-defaults
+
+
+(2) If the environment variable LD_LIBRARY_PATH is undefined, set it to the following:
+
+MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa64:MR/v96/sys/opengl/lib/glnxa64
+
+If it is defined, set it to the following:
+
+${LD_LIBRARY_PATH}:MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa64:MR/v96/sys/opengl/lib/glnxa64
+
+You must have Python 2.7, 3.5, 3.6, and/or 3.7 on your machine to install this package. Go to the directory containing your package and the file setup.py and execute:
+
+        python setup.py install [options]
+
+For details, see GettingStarted.html, distributed with this package, or the official Python documentation at:
+
+        https://docs.python.org/2/install/index.html</param.target.install.notes>
+    <param.intermediate>${PROJECT_ROOT}/build/for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}/pySpinW</param.files.only>
+    <param.output>${PROJECT_ROOT}/build/for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}/build</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.python.module</param.target.type>
+    <param.support.packages />
+    <param.namespace />
+    <param.classorg />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>false</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <param.user.only.registration>false</param.user.only.registration>
+    <param.assembly.type>false</param.assembly.type>
+    <param.encryption.key.file />
+    <param.net.enable.remoting>false</param.net.enable.remoting>
+    <param.net.tsa.enable>false</param.net.tsa.enable>
+    <param.net.tsa.assembly />
+    <param.net.tsa.interface />
+    <param.net.tsa.namespace />
+    <param.net.tsa.superclass>Class1</param.net.tsa.superclass>
+    <param.net.tsa.metadata />
+    <param.net.tsa.metadata.assembly>/home/simonward/PycharmProjects/pySpinW</param.net.tsa.metadata.assembly>
+    <param.net.saved.interface />
+    <param.cpp.api>option.cpp.all</param.cpp.api>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.screenshot />
+      <param.guid />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.logo />
+      <param.install.notes />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.support.packages />
+      <param.namespace />
+      <param.classorg />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.create.log />
+      <param.log.file />
+      <param.user.only.registration />
+      <param.assembly.type />
+      <param.encryption.key.file />
+      <param.net.enable.remoting />
+      <param.net.tsa.enable />
+      <param.net.tsa.assembly />
+      <param.net.tsa.interface />
+      <param.net.tsa.namespace />
+      <param.net.tsa.superclass />
+      <param.net.tsa.metadata />
+      <param.net.tsa.metadata.assembly />
+      <param.net.saved.interface />
+      <param.cpp.api />
+    </unset>
+    <fileset.exports>
+      <file>${PROJECT_ROOT}/src/call.m</file>
+      <file>${PROJECT_ROOT}/src/call2.m</file>
+      <file>${PROJECT_ROOT}/src/getArgOut.m</file>
+      <file>${PROJECT_ROOT}/src/get_global.m</file>
+      <file>${PROJECT_ROOT}/src/recfind.m</file>
+      <file>${PROJECT_ROOT}/src/set_global.m</file>
+      <file>${PROJECT_ROOT}/src/waitforgui.m</file>
+    </fileset.exports>
+    <fileset.classes>
+      <entity.package name="">
+        <entity.class name="Class1">
+          <file>${PROJECT_ROOT}/src/call.m</file>
+          <file>${PROJECT_ROOT}/src/call2.m</file>
+          <file>${PROJECT_ROOT}/src/get_global.m</file>
+          <file>${PROJECT_ROOT}/src/getArgOut.m</file>
+          <file>${PROJECT_ROOT}/src/recfind.m</file>
+          <file>${PROJECT_ROOT}/src/set_global.m</file>
+          <file>${PROJECT_ROOT}/src/waitforgui.m</file>
+        </entity.class>
+      </entity.package>
+    </fileset.classes>
+    <fileset.resources>
+      <file>${PROJECT_ROOT}/src/spinW/dat_files</file>
+      <file>${PROJECT_ROOT}/src/spinW/external</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles</file>
+    </fileset.resources>
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}/src/spinW/install_spinw.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@cif/cif.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@cif/importcif.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/abc.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/addaniso.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/addatom.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/addcoupling.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/addg.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/addmatrix.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/addtwin.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/anneal.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/annealloop.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/atom.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/basisvector.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/copy.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/couplingtable.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/disp.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/energy.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/export.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/field.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/fitspec.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/formula.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/fourier.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/fouriersym.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/gencoupling.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/genlattice.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/genmagstr.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/getmatrix.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/horace.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/horace_sqw.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/intmatrix.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/magstr.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/magtable.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/matom.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/matparser.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/moment.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/newcell.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/nosym.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/notwin.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/optmagk.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/optmagsteep.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/optmagstr.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/plot.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/powspec.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/private/datastruct.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/private/initfield.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/quickham.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/rl.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/setmatrix.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/setunit.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/spinw.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/spinwave.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/spinwavefast.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/spinwavesym.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/struct.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/structfact.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/symbolic.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/symmetry.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/symop.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/table.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/temperature.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/twinq.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/unitcell.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/validate.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@spinw/version.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@swpref/export.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@swpref/import.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@swpref/private/datastruct.m</file>
+      <file>${PROJECT_ROOT}/src/spinW/swfiles/@swpref/swpref.m</file>
+      <file>${MATLAB_ROOT}/toolbox/local/userpath.m</file>
+    </fileset.depfun>
+    <fileset.package>
+      <file>${PROJECT_ROOT}/src/python/__init__.py</file>
+      <file>${PROJECT_ROOT}/src/python/DataTypes.py</file>
+      <file>${PROJECT_ROOT}/src/python/Matlab.py</file>
+      <file>${PROJECT_ROOT}/src/python/MatlabFunction.py</file>
+      <file>${PROJECT_ROOT}/src/python/MatlabProxyObject.py</file>
+      <file>${PROJECT_ROOT}/src/python/MatlabStruct.py</file>
+    </fileset.package>
+    <fileset.examples />
+    <fileset.documentation />
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}/build/for_testing" name="setup.py" optional="false">${PROJECT_ROOT}/build/for_testing/setup.py</file>
+      <file location="${PROJECT_ROOT}/build/for_testing" name="swFuncs" optional="false">${PROJECT_ROOT}/build/for_testing/swFuncs</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/ssd/MATLAB/R2019a</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>false</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>true</linux>
+      <solaris>false</solaris>
+      <osver>4.18.0-21-generic</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>glnxa64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
