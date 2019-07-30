@@ -9,8 +9,8 @@ class DataTypes:
         Data Converter to/from python and MATLAB
         :param matlab:
         """
-        self.__matlab = pyMatlab
-        self.__interface = interface
+        self._matlab = pyMatlab
+        self._interface = interface
         # self.outNumpy = True
         # self.transpose = True
 
@@ -26,12 +26,12 @@ class DataTypes:
             # Case 1)
             if isinstance(data, np.ndarray):
                 if np.iscomplexobj(data):
-                    data = self.__interface.call('complex', (self.encode(data.real.tolist()), self.encode(data.imag.tolist())), nargout=1)
+                    data = self._interface.call('complex', (self.encode(data.real.tolist()), self.encode(data.imag.tolist())), nargout=1)
                 else:
                     data = data.tolist()
-                    data = self.__matlab.double(data)
+                    data = self._matlab.double(data)
             else:
-                data = self.__matlab.double(data)
+                data = self._matlab.double(data)
         elif isinstance(data, np.integer):
             # Case 4)
             data = float(data)
@@ -60,33 +60,39 @@ class DataTypes:
         return data
 
     def decode(self, data):
+        # This is where multiple results are passed back
+        if isinstance(data, tuple):
+            outData = []
+            for thisData in data:
+                outData.append(self.decode(thisData))
+            return tuple(outData)
         # Decode the numeric data types. NOTE that we let the functions/methods slip through.
         if isinstance(data, list):
             # This is a cell return
             for key, item in enumerate(data):
                 data[key] = self.decode(data[key])
             data = tuple(data)
-        elif isinstance(data, self.__matlab.double):
+        elif isinstance(data, self._matlab.double):
             if data._is_complex:
                 data = (np.array(data._real) + 1j*np.array(data._imag)).reshape(data._size)
             else:
                 data = np.array(data).reshape(data.size)
-        elif isinstance(data, self.__matlab.int8):
+        elif isinstance(data, self._matlab.int8):
             # TODO for all available data types
             data = np.ndarray(data)
         elif isinstance(data, str):
             if len(data) == 34:
                 if data[0:2] == '!$':
                     try:
-                        data = self.decode(self.__interface.get_global(data[2:]))
+                        data = self.decode(self._interface.get_global(data[2:]))
                     except Exception as e:
                         print(e)
         elif isinstance(data, dict):
             for key, item in data.items():
                 data[key] = self.decode(item)
-        elif self.__interface.call2('isobject', data, nargout=1):
-            data = MatlabProxyObject(self.__interface, data, self)
-        elif self.__interface.call('isa', (data, 'function_handle'), nargout=1):
-            data = MatlabFunction(self.__interface, data, converter=self, parent=[])
+        elif self._interface.callObj('isobject', data, nargout=1):
+            data = MatlabProxyObject(self._interface, data, self)
+        elif self._interface.call('isa', (data, 'function_handle'), nargout=1):
+            data = MatlabFunction(self._interface, data, converter=self, parent=[])
 
         return data

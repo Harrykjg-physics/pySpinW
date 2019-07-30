@@ -1,10 +1,9 @@
+import re
 from io import StringIO
 
 from .MatlabFunction import MatlabFunction
-import re
 
-
-class MatlabProxyObject(object):
+class MatlabProxyObject:
     """A Proxy for an object that exists in Matlab.
 
     All property accesses and function calls are executed on the
@@ -38,14 +37,14 @@ class MatlabProxyObject(object):
         Gets attributes from a MATLAB object
         :return: list of attribute names
         """
-        return self.interface.fieldnames(self.interface.feval('handle', self.handle))
+        return self.interface.callObj('fieldnames', self.handle)
 
     def _getMethodNames(self):
         """
         Gets methods from a MATLAB object
         :return: list of method names
         """
-        return self.interface.methods(self.interface.feval('handle', self.handle))
+        return self.interface.callObj('methods', self.handle)
 
     def __getattr__(self, name):
         """Retrieve a value or function from the object.
@@ -56,39 +55,42 @@ class MatlabProxyObject(object):
         Functions are returned as :class:`MatlabFunction` objects.
 
         """
-        m = self.interface
+        interface = self.interface
         # if it's a property, just retrieve it
-        if name in m.properties(self.handle, nargout=1):
-            return m.subsref(self.handle, m.substruct('.', name))
+        if name in interface.callObj('properties', self.handle, nargout=1):
+            return interface.call('subsref', (self.handle, interface.call('substruct', ('.', name))))
         # if it's a method, wrap it in a functor
-        if name in m.methods(self.handle, nargout=1):
+        elif name in interface.callObj('methods', self.handle, nargout=1):
             class matlab_method:
                 def __call__(_self, *args, nargout=-1, **kwargs):
                     # serialize keyword arguments:
                     args += sum(kwargs.items(), ())
-                    return getattr(m, name)(self, *args, nargout=nargout)
+                    return getattr(interface, name)(self, *args, nargout=nargout)
 
                 # only fetch documentation when it is actually needed:
                 @property
                 def __doc__(_self):
-                    classname = getattr(m, 'class')(self)
-                    return m.help('{0}.{1}'.format(classname, name), nargout=1)
+                    classname = getattr(interface, 'class')(self)
+                    # TODO this is probably broken :-/
+                    return interface.help('{0}.{1}'.format(classname, name), nargout=1)
 
             return matlab_method()
+        else:
+            raise AttributeError
 
     def __setattr__(self, name, value):
         self.__class__[name] = value
-        access = self.interface.substruct('.', name)
-        self.interface.subsasgn(self, access, value)
+        access = self.handle, self.interface.call('substruct', ('.', name))
+        self.interface.call('subsasgn', (self, access, value))
 
     def __repr__(self):
         # getclass = self.interface.str2func('class')
-        return "<proxy for Matlab {} object>".format(self.interface.feval('class', self.handle))
+        return "<proxy for Matlab {} object>".format(self.interface.callObj('class', self.handle))
 
     def __str__(self):
         # remove pseudo-html tags from Matlab output
-        html_str = self.interface.eval("@(x) evalc('disp(x)')")
-        html_str = self.interface.feval(html_str, self.handle)
+        # html_str = self.interface.call2('str2func', "@(x) evalc('disp(x)')")
+        html_str = self.interface.callObj(self.interface.callObj('str2func', "@(x) evalc('disp(x)')"), self.handle)
         return re.sub('</?a[^>]*>', '', html_str)
 
     @property

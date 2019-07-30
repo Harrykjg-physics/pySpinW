@@ -1,4 +1,4 @@
-function results = call(name, args)
+function varargout = call(name, args)
 
 resultsize = nargout;
 if nargin == 1
@@ -8,19 +8,16 @@ end
 if resultsize > 0
     % call the function with the given number of
     % output arguments:
-    results = cell(resultsize, 1);
-    [results{:}] = feval(name, args{:});
-    if length(results) == 1
-        results = results{1};
-    end
+    varargout = cell(resultsize, 1);
+    [varargout{:}] = feval(name, args{:});
 else
     % try to get output from ans:
     clear('ans');
     feval(name, args{:})
     try
-        results = {ans};
+        varargout = {ans};
     catch err
-        results = {[]};
+        varargout = {[]};
     end
 end
 end

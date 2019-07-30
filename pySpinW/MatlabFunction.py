@@ -1,3 +1,5 @@
+from .auxiliary import expecting
+
 class MatlabFunction:
 
     def __init__(self, interface, fun, converter=None, parent=None, caller=None):
@@ -51,11 +53,22 @@ class MatlabFunction:
         if not args:
             args = []
         if nargout > 0:
-            d = self._interface.call2(self._fun, self._parent, args, nargout=nargout)
+            d = self._interface.callObj(self._fun, self._parent, args, nargout=nargout)
         else:
-            self._interface.call2(self._fun, self._parent, args, nargout=nargout)
+            self._interface.callObj(self._fun, self._parent, args, nargout=nargout)
             if self._caller is not None:
                 self._caller.updateProxy()
             return
+
+        if nargout > 1:
+            pyArgOut = expecting(offset=12)
+            d = self.converter.decode(d)
+            if pyArgOut == 1:
+                if isinstance(d, tuple):
+                    return d[0]
+                else:
+                    return d
+            else:
+                return d[0:pyArgOut]
 
         return self.converter.decode(d)

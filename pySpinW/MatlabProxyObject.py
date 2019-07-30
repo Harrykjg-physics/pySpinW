@@ -3,7 +3,6 @@ from io import StringIO
 
 from .MatlabFunction import MatlabFunction
 
-
 class MatlabProxyObject:
     """A Proxy for an object that exists in Matlab.
 
@@ -38,14 +37,14 @@ class MatlabProxyObject:
         Gets attributes from a MATLAB object
         :return: list of attribute names
         """
-        return self.interface.call2('fieldnames', self.handle)
+        return self.interface.callObj('fieldnames', self.handle)
 
     def _getMethodNames(self):
         """
         Gets methods from a MATLAB object
         :return: list of method names
         """
-        return self.interface.call2('methods', self.handle)
+        return self.interface.callObj('methods', self.handle)
 
     def __getattr__(self, name):
         """Retrieve a value or function from the object.
@@ -58,10 +57,10 @@ class MatlabProxyObject:
         """
         interface = self.interface
         # if it's a property, just retrieve it
-        if name in interface.call2('properties', self.handle, nargout=1):
+        if name in interface.callObj('properties', self.handle, nargout=1):
             return interface.call('subsref', (self.handle, interface.call('substruct', ('.', name))))
         # if it's a method, wrap it in a functor
-        elif name in interface.call2('methods', self.handle, nargout=1):
+        elif name in interface.callObj('methods', self.handle, nargout=1):
             class matlab_method:
                 def __call__(_self, *args, nargout=-1, **kwargs):
                     # serialize keyword arguments:
@@ -86,12 +85,12 @@ class MatlabProxyObject:
 
     def __repr__(self):
         # getclass = self.interface.str2func('class')
-        return "<proxy for Matlab {} object>".format(self.interface.call2('class', self.handle))
+        return "<proxy for Matlab {} object>".format(self.interface.callObj('class', self.handle))
 
     def __str__(self):
         # remove pseudo-html tags from Matlab output
         # html_str = self.interface.call2('str2func', "@(x) evalc('disp(x)')")
-        html_str = self.interface.call2(self.interface.call2('str2func', "@(x) evalc('disp(x)')"), self.handle)
+        html_str = self.interface.callObj(self.interface.callObj('str2func', "@(x) evalc('disp(x)')"), self.handle)
         return re.sub('</?a[^>]*>', '', html_str)
 
     @property
