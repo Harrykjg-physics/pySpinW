@@ -1,16 +1,19 @@
 import numpy as np
+import dask.array as da
 from .MatlabProxyObject import MatlabProxyObject
 from .MatlabFunction import MatlabFunction
 
 class DataTypes:
 
-    def __init__(self, interface, pyMatlab):
+    def __init__(self, interface, pyMatlab, daskArray=False, chunks=None):
         """
         Data Converter to/from python and MATLAB
         :param matlab:
         """
         self._matlab = pyMatlab
         self._interface = interface
+        self._dask = daskArray
+        self._chunks = chunks
         # self.outNumpy = True
         # self.transpose = True
 
@@ -73,13 +76,10 @@ class DataTypes:
                 data[key] = self.decode(data[key])
             data = tuple(data)
         elif isinstance(data, self._matlab.double):
-            if data._is_complex:
-                data = (np.array(data._real) + 1j*np.array(data._imag)).reshape(data._size)
-            else:
-                data = np.array(data).reshape(data.size)
+            data = self._arrayCreator(data)
         elif isinstance(data, self._matlab.int8):
             # TODO for all available data types
-            data = np.ndarray(data)
+            data = self._arrayCreator(data, dtype=np.int)
         elif isinstance(data, str):
             if len(data) == 34:
                 if data[0:2] == '!$':
@@ -96,3 +96,19 @@ class DataTypes:
             data = MatlabFunction(self._interface, data, converter=self, parent=[])
 
         return data
+
+    def _arrayCreator(self, data, dtype=None):
+        if self._dask:
+            return da.from_array(np.array(data), self._chunks)
+        else:
+            if dtype is not None:
+                return np.array(data)
+            else:
+                return np.array(data, dtype=dtype)
+
+    def _arrayReturner(self, data):
+        if isinstance(data, np.ndarray):
+            return data.tolist()
+        elif isinstance(data, da.array):
+            print('---- This is not advised -----')
+            data =  np.array(data).tolist()

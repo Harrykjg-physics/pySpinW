@@ -23,6 +23,7 @@ class Matlab:
         self.interface = None
         self.pyMatlab = None
         self.converter = None
+        self._daskArrays = False
         self.initialize()
 
     def initialize(self):
@@ -35,6 +36,18 @@ class Matlab:
         import matlab as pyMatlab
         self.pyMatlab = pyMatlab
         self.converter = DataTypes(self.interface, pyMatlab)
+
+    @property
+    def daskArrays(self):
+        return self._daskArrays
+
+    @daskArrays.setter
+    def daskArrays(self, value):
+        self.converter._dask = value
+        if value:
+            self.converter._chunks = 10000
+        else:
+            self.converter._chunks = None
 
     def __getattr__(self, name):
         """
