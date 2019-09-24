@@ -1,6 +1,7 @@
 import os
 import platform
 from .DataTypes import DataTypes
+from .auxiliary import expecting
 
 class Matlab:
     def __init__(self, mlPath=None, knowBetter=False):
@@ -44,12 +45,22 @@ class Matlab:
         :return: MatlabProxyObject of class/function given by name
         """
 
+        # Determine the number of returns expected
+        pyArgOut = expecting(offset=12)
         def method(*args, nargout=None):
             try:
                 if nargout is None:
                     nargout = int(self.interface.getArgOut(name, nargout=1))
-                method = self.interface.call2(name, [], self.converter.encode(args), nargout=nargout)
-                return self.converter.decode(method)
+                method = self.interface.callObj(name, [], self.converter.encode(args), nargout=nargout)
+                # Return only what is needed.
+                method = self.converter.decode(method)
+                if pyArgOut == 1:
+                    if isinstance(method, tuple):
+                        return method[0]
+                    else:
+                        return method
+                else:
+                    return method[0:pyArgOut]
             # Catch all of the funky MATLAB exceptions.
             except Exception as e:
                 print(e)
@@ -154,4 +165,3 @@ class Matlab:
 
     def waitforGUI(self):
         self.interface.waitforgui(nargout=0)
-

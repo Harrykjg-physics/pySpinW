@@ -1,8 +1,9 @@
 import os
 import platform
 from .DataTypes import DataTypes
+from .auxiliary import expecting
 
-class Matlab(object):
+class Matlab:
     def __init__(self, mlPath=None, knowBetter=False):
         """
         Create an interface to a matlab compiled python library and treat the objects in a python/matlab way instead of
@@ -44,12 +45,23 @@ class Matlab(object):
         :return: MatlabProxyObject of class/function given by name
         """
 
+        # Determine the number of returns expected
+        pyArgOut = expecting(offset=12)
         def method(*args, nargout=None):
             try:
                 if nargout is None:
                     nargout = int(self.interface.getArgOut(name, nargout=1))
-                method = self.interface.call2(name, [], self.converter.encode(args), nargout=nargout)
-                return self.converter.decode(method)
+                method = self.interface.callObj(name, [], self.converter.encode(args), nargout=nargout)
+                # Return only what is needed.
+                method = self.converter.decode(method)
+                if pyArgOut == 1:
+                    if isinstance(method, tuple):
+                        return method[0]
+                    else:
+                        return method
+                else:
+                    return method[0:pyArgOut]
+            # Catch all of the funky MATLAB exceptions.
             except Exception as e:
                 print(e)
                 return []
@@ -62,8 +74,6 @@ class Matlab(object):
         """
         if self.interface:
             self.interface.exit()
-            self.interface = None
-            self.pyMatlab = None
             print('Interface closed')
 
     def checkPath(self, mlPath, knowBetter=False):
@@ -96,9 +106,9 @@ class Matlab(object):
         obj.system = platform.system()
         if obj.system not in obj.PLATFORM_DICT:
             raise RuntimeError('{0} is not a supported platform.'.format(obj.system))
-        else:
-            # path_var is the OS-dependent name of the path variable ('PATH', 'LD_LIBRARY_PATH', "DYLD_LIBRARY_PATH')
-            (obj.path_var, obj.ext, obj.lib_prefix) = obj.PLATFORM_DICT[obj.system]
+
+        # path_var is the OS-dependent name of the path variable ('PATH', 'LD_LIBRARY_PATH', "DYLD_LIBRARY_PATH')
+        (obj.path_var, obj.ext, obj.lib_prefix) = obj.PLATFORM_DICT[obj.system]
 
         if obj.system == 'Windows':
             obj.is_windows = True
@@ -127,9 +137,9 @@ class Matlab(object):
             mlPath = ''
             obj.ver = ''
 
-        ASSUMED_PATH = os.path.join(mlPath, obj.ver, 'runtime', obj.arch) + ':' + \
-                       os.path.join(mlPath, obj.ver, 'sys', 'os', obj.arch) + ':' + \
-                       os.path.join(mlPath, obj.ver, 'bin', obj.arch) + ':' + \
+        ASSUMED_PATH = os.path.join(mlPath, obj.ver, 'runtime', obj.arch) + os.pathsep + \
+                       os.path.join(mlPath, obj.ver, 'sys', 'os', obj.arch) + os.pathsep + \
+                       os.path.join(mlPath, obj.ver, 'bin', obj.arch) + os.pathsep + \
                        os.path.join(mlPath, obj.ver, 'extern', 'bin', obj.arch)
 
         if mlPath:
@@ -138,7 +148,7 @@ class Matlab(object):
                 if not knowBetter:
                     mlPath = ASSUMED_PATH
                     f = ' forced: '
-            os.environ[obj.path_var] = mlPath
+            os.environ[obj.path_var] = os.environ.get(obj.path_var, '') + os.pathsep + mlPath
             print('Set' + f + os.environ.get(obj.path_var))
         else:
             if obj.path_var in os.environ:
@@ -153,5 +163,5 @@ class Matlab(object):
 #         DYLD_LIBRARY_PATH:
 #         /Applications/MATLAB/MATLAB_Runtime/v96/runtime/maci64:/Applications/MATLAB/MATLAB_Runtime/v96/sys/os/maci64:/Applications/MATLAB/MATLAB_Runtime/v96/bin/maci64:/Applications/MATLAB/MATLAB_Runtime/v96/extern/bin/maci64:/Users/simonward/.conda/envs/pySpinW2/lib
 
-
-
+    def waitforGUI(self):
+        self.interface.waitforgui(nargout=0)
